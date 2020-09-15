@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 
-// Bluetoothデバイスをスキャンし、接続し、サービスを表示し、値を読み取り、更新し、変更を通知することができる完全なアプリケーションが完成
+// Bluetoothデバイスをスキャンし, 接続し, サービスを表示し, 値(Value)を読み取り, 更新し, 変更を通知することができるアプリケーション
 
 void main() => runApp(MyApp());
 
@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
     theme: ThemeData(
       primarySwatch: Colors.blue,
     ),
-    home: MyHomePage(title: 'Flutter BLE'),
+    home: MyHomePage(title: 'Flutter BLE Operating'),
   );
 }
 
@@ -63,6 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
 //    scan results
     widget.flutterBlue.scanResults.listen((List<ScanResult> results) {
       for (ScanResult result in results) {
+//        print("[Info] result.device : ${result.device}");
         _addDeviceTolist(result.device);
       }
     });
@@ -70,9 +71,11 @@ class _MyHomePageState extends State<MyHomePage> {
     widget.flutterBlue.startScan();
   }
 
+//  ConnnectできるBLE端末のList表示
   ListView _buildListViewOfDevices() {
     List<Container> containers = new List<Container>();
     for (BluetoothDevice device in widget.devicesList) {
+      print("[Info] device : ${device}");
       containers.add(
         Container(
           height: 60,
@@ -92,7 +95,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   'Connect',
                   style: TextStyle(color: Colors.white),
                 ),
+//                Connectできるかのif文
                 onPressed: () async {
+                  print("[Info] Connect Device ${device.id}");
                   widget.flutterBlue.stopScan();
                   try {
                     await device.connect();
@@ -236,6 +241,7 @@ class _MyHomePageState extends State<MyHomePage> {
       List<Widget> characteristicsWidget = List<Widget>();
 
       for (BluetoothCharacteristic characteristic in service.characteristics) {
+        print("[Info] characteristic: ${characteristic}");
         characteristicsWidget.add(
           Align(
             alignment: Alignment.centerLeft,
